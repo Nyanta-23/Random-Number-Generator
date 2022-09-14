@@ -14,10 +14,10 @@ window.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         resetGacha();
     });
-
 });
 
 
+// Add Gacha Result list and Displayed for box gacha result
 function addGacha() {
     const gachaObject = generateGachaToObject(numberToString());
     arrayResultList.push(gachaObject);
@@ -25,10 +25,9 @@ function addGacha() {
     document.dispatchEvent(new Event(RENDER_EVENT));
 }
 
-
+// Reset Gacha result list
 function resetGacha() {
     const tableForReset = document.getElementsByClassName('table-history')[0];
-
     tableForReset.innerHTML = '<tr><th>Gacha Number Result</th></tr>';
 
     document.dispatchEvent(new Event(RENDER_EVENT));
@@ -42,26 +41,26 @@ function generateGachaToObject(results) {
 }
 
 
+// Render browser
 document.addEventListener(RENDER_EVENT, function () {
-    const tableForAdd = document.getElementsByClassName('table-history')[0];
     const resultElement = document.getElementsByClassName('result-value')[0];
+    const tableAdd = removeElementGachaResults();
     resultElement.innerText = '0';
 
-    for (let i = 0; i < arrayResultList.length; i++) {
+    for (let index = 0; index < arrayResultList.length; index++) {
 
-        const getIndex = arrayResultList.shift(i);
+        const getIndex = arrayResultList[index];
         const listTableElement = createElementsGacha(getIndex);
 
         resultElement.innerText = getIndex.results;
-        tableForAdd.appendChild(listTableElement);
+        tableAdd.appendChild(listTableElement);
     }
 
 });
 
 
 
-
-// Gacha Program is done
+// Gacha program
 function numberSet() {
     const userInput = document.getElementById('to-input').value;
     const i = 1;
@@ -97,16 +96,22 @@ function numberToString() {
 
 
 // create Elements
-
 function createElementsGacha(itemNumber) {
     const tableRow = document.createElement('tr');
     const tableData = document.createElement('td');
 
-    if (itemNumber.results != arrayResultList.results) {
-        tableData.innerText = itemNumber.results;
-        tableRow.append(tableData);
-
-        return tableRow;
-    }
-
+    tableData.innerText = itemNumber.results;
+    tableRow.append(tableData);
+    
+    return tableRow;
 }
+
+
+
+// Remove current gacha result from element
+function removeElementGachaResults(){
+    const tableForAdd = document.getElementsByClassName('table-history')[0];
+    tableForAdd.innerHTML = '<tr><th>Gacha Number Results</th></tr>';
+    return tableForAdd;
+}
+
