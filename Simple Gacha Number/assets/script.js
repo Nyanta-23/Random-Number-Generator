@@ -2,8 +2,8 @@ const RENDER_EVENT = 'render_results';
 const arrayResultList = [];
 
 window.addEventListener('DOMContentLoaded', function () {
-    const gachaButton = document.getElementsByClassName('gacha-button')[0];
-    const resetButton = document.getElementsByClassName('reset-button')[0];
+    const gachaButton = document.querySelector('.gacha-button');
+    const resetButton = document.querySelector('.reset-button');
 
     gachaButton.addEventListener('click', function (e) {
         e.preventDefault();
@@ -14,10 +14,10 @@ window.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         resetGacha();
     });
+
 });
 
 
-// Add Gacha Result list and Displayed for box gacha result
 function addGacha() {
     const gachaObject = generateGachaToObject(numberToString());
     arrayResultList.push(gachaObject);
@@ -25,10 +25,12 @@ function addGacha() {
     document.dispatchEvent(new Event(RENDER_EVENT));
 }
 
-// Reset Gacha result list
+
 function resetGacha() {
-    const tableForReset = document.getElementsByClassName('table-history')[0];
-    tableForReset.innerHTML = '<tr><th>Gacha Number Result</th></tr>';
+    arrayResultList.splice(0, arrayResultList.length);
+
+    const tableForReset = document.querySelector('.table-history');
+    tableForReset.innerHTML = '<tr><th>Gacha Number Results</th></tr>';
 
     document.dispatchEvent(new Event(RENDER_EVENT));
 }
@@ -41,10 +43,12 @@ function generateGachaToObject(results) {
 }
 
 
-// Render browser
 document.addEventListener(RENDER_EVENT, function () {
+
     const resultElement = document.getElementsByClassName('result-value')[0];
+
     const tableAdd = removeElementGachaResults();
+
     resultElement.innerText = '0';
 
     for (let index = 0; index < arrayResultList.length; index++) {
@@ -53,14 +57,21 @@ document.addEventListener(RENDER_EVENT, function () {
         const listTableElement = createElementsGacha(getIndex);
 
         resultElement.innerText = getIndex.results;
-        tableAdd.appendChild(listTableElement);
+        tableAdd.append(listTableElement);
     }
-
 });
 
 
+// Remove current gacha result from element
+function removeElementGachaResults() {
+    const tableForAdd = document.getElementsByClassName('table-history')[0];
+    tableForAdd.innerHTML = '<tr><th>Gacha Number Results</th></tr>';
 
-// Gacha program
+    return tableForAdd;
+}
+
+
+// Gacha Program
 function numberSet() {
     const userInput = document.getElementById('to-input').value;
     const i = 1;
@@ -96,22 +107,14 @@ function numberToString() {
 
 
 // create Elements
+
 function createElementsGacha(itemNumber) {
     const tableRow = document.createElement('tr');
     const tableData = document.createElement('td');
 
+
     tableData.innerText = itemNumber.results;
     tableRow.append(tableData);
-    
+
     return tableRow;
 }
-
-
-
-// Remove current gacha result from element
-function removeElementGachaResults(){
-    const tableForAdd = document.getElementsByClassName('table-history')[0];
-    tableForAdd.innerHTML = '<tr><th>Gacha Number Results</th></tr>';
-    return tableForAdd;
-}
-
